@@ -81,7 +81,7 @@ void FEOSCoreUtilitiesModule::ShutdownModule()
 	SteamAPI_Shutdown();
 }
 
-bool ConfigureSteamInitDevOptions(bool& RequireRelaunch, int32& RelaunchAppId)
+bool ConfigureSteamInitDevOptionsInternal(bool& RequireRelaunch, int32& RelaunchAppId)
 {
 	// Write out the steam_appid.txt file before launching
 	if (!GConfig->GetInt(TEXT("OnlineSubsystemSteam"), TEXT("SteamDevAppId"), RelaunchAppId, GEngineIni))
@@ -111,7 +111,7 @@ bool FEOSCoreUtilitiesModule::Init()
 	bool bRelaunchInSteam = false;
 	int RelaunchAppId = 0;
 
-	if (!ConfigureSteamInitDevOptions(bRelaunchInSteam, RelaunchAppId))
+	if (!ConfigureSteamInitDevOptionsInternal(bRelaunchInSteam, RelaunchAppId))
 	{
 		UE_LOG(EOSCoreUtilitiesLog, Error, TEXT("Could not set up the steam environment!"));
 		return false;
