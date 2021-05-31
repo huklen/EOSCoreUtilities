@@ -1,15 +1,15 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "1.0.1",
 	"FriendlyName": "EOSCoreUtilities",
 	"Description": "",
-	"Category": "Other",
-	"CreatedBy": "",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"SupportURL": "",
+	"Category": "eelDev Plugins",
+	"CreatedBy": "hulken",
+	"CreatedByURL": "https://eeldev.com",
+	"DocsURL": "https://eeldev.com",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/af157f773f084ca89036cd7bc03fb416",
+	"SupportURL": "https://eeldev.com",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"Installed": false,
@@ -26,15 +26,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "OnlineSubsystemUtils",
-			"Enabled": true
-		},
-		{
 			"Name": "SteamShared",
-			"Enabled": true
-		},
-		{
-			"Name": "EOSCore",
 			"Enabled": true
 		}
 	]
