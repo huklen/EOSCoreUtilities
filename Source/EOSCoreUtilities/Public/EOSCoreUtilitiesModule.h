@@ -6,15 +6,12 @@
 #include "Modules/ModuleManager.h"
 #include "Containers/Ticker.h"
 #include "EOSCoreUtilitiesTypes.h"
-#include "Runtime/Launch/Resources/Version.h"
 
 #pragma once
 
 THIRD_PARTY_INCLUDES_START
 #include "steam/steam_api.h"
 THIRD_PARTY_INCLUDES_END
-
-#define STEAMAPPIDFILENAME TEXT("steam_appid.txt")
 
 #include "EOSCoreUtilitiesModule.generated.h"
 

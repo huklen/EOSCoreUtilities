@@ -8,25 +8,10 @@ public class EOSCoreUtilities : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
-		PublicIncludePaths.AddRange(
-			new string[] {
-			}
-			);
-				
-		
-		PrivateIncludePaths.AddRange(
-			new string[] {
-			}
-			);
-			
-		
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
-				"SteamShared",
-				"EOSLibrary",
-				"EOSCore"
+				"Core"
 			}
 			);
 			
@@ -38,16 +23,11 @@ public class EOSCoreUtilities : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"EOSLibrary",
+				"SteamShared"
 			}
 			);
 		
-		
-		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
-			}
-			);
-
 		AddEngineThirdPartyPrivateStaticDependencies(Target, "Steamworks");
 	}
 }

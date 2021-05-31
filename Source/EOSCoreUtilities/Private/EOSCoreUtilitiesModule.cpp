@@ -3,8 +3,9 @@
 #include "EOSCoreUtilitiesModule.h"
 #include "SteamSharedModule.h"
 #include "Serialization/BufferArchive.h"
-#include "ThirdParty/EOSLibrary/Include/eos_common.h"
+#include "eos_common.h"
 
+#define STEAMAPPIDFILENAME TEXT("steam_appid.txt")
 #define LOCTEXT_NAMESPACE "FEOSCoreUtilitiesModule"
 
 DEFINE_LOG_CATEGORY(EOSCoreUtilitiesLog);
@@ -171,8 +172,8 @@ void FEOSCoreUtilitiesModule::RequestEncryptedAppTicket(const FOnRequestAppTicke
 
 		UE_LOG(EOSCoreUtilitiesLog, Verbose, TEXT("Requested encrypted app ticket"));
 
-		SteamAPICall_t m_Handle = SteamUser()->RequestEncryptedAppTicket(nullptr, 0);
-		SteamCallResultEncryptedAppTicket.Set(m_Handle, Get(), &FEOSCoreUtilitiesModule::OnRequestEncryptedAppTicket);
+		const SteamAPICall_t Handle = SteamUser()->RequestEncryptedAppTicket(nullptr, 0);
+		SteamCallResultEncryptedAppTicket.Set(Handle, Get(), &FEOSCoreUtilitiesModule::OnRequestEncryptedAppTicket);
 	}
 }
 
@@ -188,39 +189,40 @@ void FEOSCoreUtilitiesModule::OnRequestEncryptedAppTicket(EncryptedAppTicketResp
 
 	if (pEncryptedAppTicketResponse->m_eResult == k_EResultOK)
 	{
-		uint32 m_TicketSize = 0;
-		SteamUser()->GetEncryptedAppTicket(nullptr, 0, &m_TicketSize);
+		uint32 TicketSize = 0;
+		SteamUser()->GetEncryptedAppTicket(nullptr, 0, &TicketSize);
 
-		uint32 m_BuffSize = m_TicketSize;
-		uint8* m_AppTicket = new uint8[m_BuffSize];
+		const uint32 BuffSize = TicketSize;
+		uint8* AppTicket = new uint8[BuffSize];
 
-		if (!SteamUser()->GetEncryptedAppTicket(m_AppTicket, m_BuffSize, &m_TicketSize))
+		if (!SteamUser()->GetEncryptedAppTicket(AppTicket, BuffSize, &TicketSize))
 		{
 			UE_LOG(EOSCoreUtilitiesLog, Warning, TEXT("Steam App Ticket not available"));
-			delete[] m_AppTicket;
+			delete[] AppTicket;
 			return;
 		}
 
-		TArray<uint8> m_StringBuff;
-		m_StringBuff.Append(m_AppTicket, m_TicketSize);
-		FString m_TicketString;
+		TArray<uint8> StringBuffer;
+		StringBuffer.Append(AppTicket, TicketSize);
+		FString TicketString;
 
-		char* m_Buffer = new char[2048];
+		char* Buffer = new char[2048];
 		uint32_t outBuffer = 2048;
 
-		EOS_EResult m_Result = EOS_ByteArray_ToString(m_StringBuff.GetData(), m_StringBuff.Num(), m_Buffer, &outBuffer);
-		if (m_Result == EOS_EResult::EOS_Success)
+		const EOS_EResult Result = EOS_ByteArray_ToString(StringBuffer.GetData(), StringBuffer.Num(), Buffer, &outBuffer);
+		
+		if (Result == EOS_EResult::EOS_Success)
 		{
-			m_TicketString = m_Buffer;
+			TicketString = Buffer;
 		}
 
-		delete[] m_Buffer;
-		delete[] m_AppTicket;
+		delete[] Buffer;
+		delete[] AppTicket;
 
-		FOnRequestAppTicketResponse m_Delegate;
-		while (s_OnRequestAppTicketResponse.Dequeue(m_Delegate))
+		FOnRequestAppTicketResponse Delegate;
+		while (s_OnRequestAppTicketResponse.Dequeue(Delegate))
 		{
-			m_Delegate.ExecuteIfBound(m_TicketString);
+			Delegate.ExecuteIfBound(TicketString);
 		}
 	}
 	else if (pEncryptedAppTicketResponse->m_eResult == k_EResultLimitExceeded)
