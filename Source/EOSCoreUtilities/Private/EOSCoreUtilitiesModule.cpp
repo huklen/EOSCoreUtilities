@@ -90,6 +90,7 @@ bool ConfigureSteamInitDevOptionsInternal(bool& RequireRelaunch, int32& Relaunch
 		UE_LOG(EOSCoreUtilitiesLog, Error, TEXT("Missing SteamDevAppId key in OnlineSubsystemSteam of DefaultEngine.ini"));
 		return false;
 	}
+#if !UE_BUILD_SHIPPING && !UE_BUILD_SHIPPING_WITH_EDITOR
 	else
 	{
 		if (!WriteSteamAppIdToDisk(RelaunchAppId))
@@ -98,6 +99,7 @@ bool ConfigureSteamInitDevOptionsInternal(bool& RequireRelaunch, int32& Relaunch
 			return false;
 		}
 	}
+#endif // !UE_BUILD_SHIPPING && !UE_BUILD_SHIPPING_WITH_EDITOR
 
 	return true;
 }
